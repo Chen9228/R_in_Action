@@ -1,6 +1,6 @@
 ---
-title: "R in Action - Chapter 4"
-output: html_document
+title: "R in Action - Chapter 4:Basic data Mangement"
+output: html_notebook
 ---
 
 ```{r setup, include=FALSE}
@@ -73,4 +73,25 @@ newdata
 1.`merge`: merge data frames horizontally,`by` common keys;
 Or can use `cbind` without specify common keys.   
 2.`rbind`:join data frames vertically,add rows to data frames.
-##### subsetting datasets
+##### Use `subset()` function 
+```{r}
+subset(leadership,age >= 35|age < 24,select = c(item1,item2,item3,item4))
+```
+##### Random Sample
+Use `sample()` function: sample(x,size,replace = FALSE,prob = NULL)
+```{r}
+leadership[sample(1:nrow(leadership),3,replace = FALSE),]
+```
+##### use SQL
+Use `sqldf` package
+```{r}
+library(sqldf)
+newdf <- sqldf(
+  "select * from mtcars where carb = 1 order by mpg",
+  row.names = TRUE
+)
+newdf
+sqldf("select avg(mpg) as avg_mpg,avg(disp) as avg_disp,gear from mtcars where cyl in (4,6) group by gear")
+```
+
+

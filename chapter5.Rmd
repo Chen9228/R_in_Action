@@ -1,0 +1,58 @@
+---
+title: "R in Action - Chapter 5: Adavanced data Management"
+output: html_notebook
+---
+##### Character Functions
+| Function                                                     | Description           |
+|-----------|-----------------------|
+| nchar()                                                      | Counts the number of characters of x.<br> x <- c("ab","cde","fghij") <br>length(x):3 <br>nchar(x[3]):5                                                                                                                      |
+| substr(x，start,stop)                                        | Extracts or replaces substrings in a character vector. <br>substr("abcdef",2,4) returns bcd.                                                                                                                        |
+| grep(pattern,x,ignore.case = FALSE,fixed = FALSE)            | Searches for pattern in x. <br>If fixed = FALSE then pattern is a regular expression. <br>If fixed = TRUE,then pattern is a text string.  <br>Returns the matching indices. grep("A",c("b","A","c"),fixed = TRUE) returns 2 |
+| sub(pattern,replacement,x,ignore.case = FALSE,fixed = FALSE) | Finds pattern in x and substitutes the replacement text.<br>If fixed = FALSE then pattern is a regular expression.<br>If fixed = TRUE,then pattern is a textstring.                                                      |
+| strsplit(x,split,fixed = FALSE)                              | Splits the elements of character vector x at split.<br>If fixed = FALSE then pattern is a regular expression.<br>If fixed = TRUE,then pattern is a textstring.                                                           |
+| paste(...,sep = "")                                          | Concatenates strings after using the sep string to seperate them.                                                                                                                                               |
+| toupper(x)                                                   | Uppercase.                                                                                                                                                                                                      |
+| tolower(x)                                                   | Lowercase.                                                                                                                                                                                                      |
+##### Apply function to data frame and matrix
+`apply(x,MARGIN,FUN,...)`   
+*MARGIN = 1/0* -> Row/columns       
+*FUN* if the function specified,*...* is the parameters pass to *FUN*.      
+
+##### Combine subject test scores into singlr performance indicator and grade.
+```{r}
+options(digits = 2)
+##### Create data Frame
+Student <- c("John Davis","Angela Williams","Bullwinkle Moose",
+             "David Jones","Janice Markhammer",
+             "Cheryl Cushing","Reuven Ytzrhak",
+             "Greg Knox","Joel England","Mary Rayburn")
+math <- c(502, 600, 412, 358, 495, 512, 410, 625, 573, 522)
+science <- c(95, 99, 80, 82, 75, 85, 80, 95, 89, 86)
+english <- c(25, 22, 18, 15, 20, 28, 15, 30, 27, 18)
+roster <- data.frame(Student, math, science, english, 
+                     stringsAsFactors=FALSE)
+## get performance score
+z <- scale(roster[,2:4])
+score <- apply(z,1,mean)
+roster <- cbind(roster,score)
+
+## grade students
+y <- quantile(score,c(.8,.6,.4,.2))
+roster$grade[roster$score >= y[1]] <- "A"
+roster$grade[roster$score < y[1] & roster$score >= y[2]] <- "B"
+roster$grade[roster$score < y[2] & roster$score >= y[3]] <- "C"
+roster$grade[roster$score < y[3] & roster$score >= y[4]] <- "D"
+roster$grade[roster$score < y[4]] <- "F"
+
+## get first and last names
+name <- strsplit((roster$Student)," ")
+LastName <- sapply(name,"[",2) 
+## "[" is a function: "["(data,2) <-> data[2]
+FirstName <- sapply(name,"[",1)
+roster <- cbind(FirstName,LastName,roster[,-1])
+
+##sort by last and first name
+roster <- roster[order(LastName,FirstName),]
+roster
+```
+
