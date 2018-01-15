@@ -2,7 +2,7 @@
 title: "R in Action - Chapter 5: Adavanced data Management"
 output: html_notebook
 ---
-##### Character Functions
+##### **Character Functions**
 | Function                                                     | Description           |
 |-----------|-----------------------|
 | nchar()                                                      | Counts the number of characters of x.<br> x <- c("ab","cde","fghij") <br>length(x):3 <br>nchar(x[3]):5                                                                                                                      |
@@ -13,12 +13,12 @@ output: html_notebook
 | paste(...,sep = "")                                          | Concatenates strings after using the sep string to seperate them.                                                                                                                                               |
 | toupper(x)                                                   | Uppercase.                                                                                                                                                                                                      |
 | tolower(x)                                                   | Lowercase.                                                                                                                                                                                                      |
-##### Apply function to data frame and matrix
+##### **Apply function to data frame and matrix**
 `apply(x,MARGIN,FUN,...)`   
 *MARGIN = 1/0* -> Row/columns       
 *FUN* if the function specified,*...* is the parameters pass to *FUN*.      
 
-##### Combine subject test scores into singlr performance indicator and grade.
+##### **Combine subject test scores into singlr performance indicator and grade**
 ```{r}
 options(digits = 2)
 ##### Create data Frame
@@ -55,4 +55,3 @@ roster <- cbind(FirstName,LastName,roster[,-1])
 roster <- roster[order(LastName,FirstName),]
 roster
 ```
-
