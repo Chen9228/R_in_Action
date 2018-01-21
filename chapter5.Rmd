@@ -55,3 +55,32 @@ roster <- cbind(FirstName,LastName,roster[,-1])
 roster <- roster[order(LastName,FirstName),]
 roster
 ```
+##### **Transpose data/Aggregate data**
+- 1. To transpose data, use `t()`   
+- 2. `aggregate(x,by,FUN)` can collapse data.
+```{r}
+options(digits = 3)
+aggdata <- aggregate(mtcars,by = list(mtcars$cyl,mtcars$gear),FUN = mean,na.rm = TRUE)
+aggdata
+```
+- 3. Use `reshape2` package 
+```{r}
+library(reshape2)
+ID <- c(1,1,2,2)
+Time <- c(1,2,1,2)
+X1 <- c(5,3,6,2)
+X2 <- c(6,5,1,4)
+mydata <- data.frame(ID,Time,X1,X2)
+# melting
+md <- melt(data = mydata,id.vars = c('ID','Time'))
+# CASTING: new_data <- dcast(meltdata,formula,fun.aggregate)
+## With aggregation
+dcast(md,ID~variable,mean) # means on X1 and X2 averaged over time for each observation
+dcast(md,Time~variable,mean) # mean of X1 and X2 averaged over observations at Time 1 and Time 2
+dcast(md,ID~Time,mean) # mean for each obs at Time 1 and Time 2,averaged over X1 and X2
+
+## Without aggregation
+dcast(md,ID+Time~variable)
+dcast(md,ID+variable~Time)
+dcast(md,ID~variable+Time)
+```

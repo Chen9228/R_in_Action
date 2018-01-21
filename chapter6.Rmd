@@ -1,0 +1,10 @@
+---
+title: "R in Action - Chapter 6: Basic graphs"
+output: html_notebook
+---
+
+```{r}
+library(vcd)
+```
+```{r}
+```
